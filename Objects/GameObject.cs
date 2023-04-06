@@ -454,19 +454,17 @@ public abstract class GameObject {
     }
 
     /// <summary>
-    /// Set object's color
-    /// </summary>
-    /// <param name="color"></param>
-    public virtual void SetColor(Color color) {
-        _color = color;
-    }
-
-    /// <summary>
     /// Set object's color via RGBA
     /// </summary>
     public virtual void SetColor(byte r, byte g, byte b, byte a = 255) {
         _color = new Color(r, g, b, a);
     }
+
+    /// <summary>
+    /// Set object's color
+    /// </summary>
+    /// <param name="color"></param>
+    public virtual void SetColor(Color color) => SetColor(color.R, color.G, color.B, color.A);
 
     /// <summary>
     /// Set object's interactivness
@@ -627,11 +625,6 @@ public abstract class GameObject {
     /// Color that includes alpha
     /// </summary>
     public Color OutputColor => GetColor( ) * OutputAlpha;
-
-    // TODO PRZEMYSLEC KOLORY
-    // CZY PARENT POWINIEN MIEC WPLYW NA WYJSCIOWY KOLOR OBIEKTU?
-    // CO JEZELI MAMY DWA KOLORY - NP. BORDER I FILL, JAK MA WPLYWAC NA TO OUTPUT?
-    // CO Z ALPHA?
 
     /// <summary>
     /// Alpha from all parents
