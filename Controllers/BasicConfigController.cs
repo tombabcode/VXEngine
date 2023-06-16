@@ -38,6 +38,12 @@ namespace VXEngine.Controllers {
         public int ViewStaticWidth { get; protected set; } = 1920;
         public int ViewStaticHeight { get; protected set; } = 1080;
 
+        public Random Random { get; protected set; }
+
+        public BasicConfigController( ) {
+            Random = new Random( );
+        }
+
         /// <summary>
         /// Load configuration file
         /// </summary>

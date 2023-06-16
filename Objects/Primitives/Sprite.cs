@@ -23,7 +23,7 @@ public sealed class Sprite : GameObject {
     /// <summary>
     /// Constructor
     /// </summary>
-    public Sprite(BasicContentController content, BasicInputController input, TextureInstance texture, float x, float y) : base(input) {
+    public Sprite(BasicContentController content, BasicInputController input, TextureInstance texture, float x = 0, float y = 0) : base(input) {
         _content = content;
         _texture = texture;
         Rectangle source = _texture.GetSource( );
@@ -33,7 +33,7 @@ public sealed class Sprite : GameObject {
     /// <summary>
     /// Constructor
     /// </summary>
-    public Sprite(BasicContentController content, BasicInputController input, TextureBase data, float x, float y) : this(content, input, data.GetInstance( ), x, y) { }
+    public Sprite(BasicContentController content, BasicInputController input, TextureBase data, float x = 0, float y = 0) : this(content, input, data.GetInstance( ), x, y) { }
 
     /// <summary>
     /// Display sprite

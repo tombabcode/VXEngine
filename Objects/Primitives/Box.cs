@@ -69,6 +69,14 @@ public sealed class Box : GameObject {
         if (_textureFill != null) _textureFill.Dispose( );
         if (_textureOutline != null) _textureOutline.Dispose( );
 
+        if (_width <= 0 || _height <= 0) {
+            _textureOutline = null;
+            _textureFill = null;
+            _width = 0;
+            _height = 0;
+            return;
+        }
+
         // Create texture
         _textureOutline = new Texture2D(_content.Device, (int)_width, (int)_height);
         _textureFill = new Texture2D(_content.Device, (int)_width, (int)_height);
@@ -183,7 +191,7 @@ public sealed class Box : GameObject {
         if (OutputAlpha <= 0 || !GetVisible( ) || _width <= 0 || _height <= 0) return;
 
         // Display fill
-        if (ColorFill != Color.Transparent)
+        if (ColorFill != Color.Transparent && _textureFill != null)
             _content.Canvas.Draw(
                 _textureFill,
                 new Vector2(DisplayX + GetRotationOriginX( ) * DisplayWidth, DisplayY + GetRotationOriginY( ) * DisplayHeight),
@@ -197,7 +205,7 @@ public sealed class Box : GameObject {
             );
 
         // Display outline
-        if (ColorOutline != Color.Transparent && Thickness > 0)
+        if (ColorOutline != Color.Transparent && Thickness > 0 && _textureOutline != null)
             _content.Canvas.Draw(
                 _textureOutline,
                 new Vector2(DisplayX + GetRotationOriginX( ) * DisplayWidth, DisplayY + GetRotationOriginY( ) * DisplayHeight),

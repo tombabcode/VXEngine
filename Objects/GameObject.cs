@@ -602,14 +602,24 @@ public abstract class GameObject {
     public float DisplayY => (_parent != null ? _parent.DisplayY : 0) + GetY( ) - GetOriginY( ) * DisplayHeight;
 
     /// <summary>
+    /// In-game render scale of all nested objects in X axis
+    /// </summary>
+    public float DisplayScaleX => (_parent != null ? _parent.DisplayScaleX : 1) * GetScaleX( );
+
+    /// <summary>
+    /// In-game render scale of all nested objects in Y axis
+    /// </summary>
+    public float DisplayScaleY => (_parent != null ? _parent.DisplayScaleY : 1) * GetScaleY( );
+
+    /// <summary>
     /// In-game render width
     /// </summary>
-    public float DisplayWidth => GetWidth( ) * GetScaleX( );
+    public float DisplayWidth => GetWidth( ) * DisplayScaleX;
 
     /// <summary>
     /// In-game render height
     /// </summary>
-    public float DisplayHeight => GetHeight( ) * GetScaleY( );
+    public float DisplayHeight => GetHeight( ) * DisplayScaleY;
 
     /// <summary>
     /// In-game rotation origin X
