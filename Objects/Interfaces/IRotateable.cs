@@ -2,15 +2,18 @@
 
 public interface IRotateable {
 
-    GameObjectV2 SetAngle(float angle);
-    GameObjectV2 SetRotationOriginX(float originX);
-    GameObjectV2 SetRotationOriginY(float originY);
-    GameObjectV2 SetRotationOrigin(float originX, float originY);
-    GameObjectV2 SetRotationOrigin(float origin);
-    float GetAngle( );
+    GameObject SetAngleInRadians(float angle);
+    GameObject SetAngleInDegrees(float angle);
+    GameObject SetRotationOriginX(float originX);
+    GameObject SetRotationOriginY(float originY);
+    GameObject SetRotationOrigin(float originX, float originY);
+    GameObject SetRotationOrigin(float origin);
+    float GetAngleInRadians( );
+    float GetAngleInDegrees( );
     float GetRotationOriginX( );
     float GetRotationOriginY( );
 
-    void AddAngle(float angle);
+    void AddAngleInRadians(float angle);
+    void AddAngleInDegrees(float angle);
 
 }

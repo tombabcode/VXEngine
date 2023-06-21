@@ -8,10 +8,10 @@ public interface IPositionable {
     float GetX( );
     float GetY( );
 
-    GameObjectV2 SetX(float x, UnitType unit = UnitType.Pixel);
-    GameObjectV2 SetY(float y, UnitType unit = UnitType.Pixel);
-    GameObjectV2 SetPosition(float x, float y, UnitType unit = UnitType.Pixel);
-    GameObjectV2 SetPosition(MouseData mouse);
+    GameObject SetX(float x, UnitType unit = UnitType.Pixel);
+    GameObject SetY(float y, UnitType unit = UnitType.Pixel);
+    GameObject SetPosition(float x, float y, UnitType unit = UnitType.Pixel);
+    GameObject SetPosition(MouseData mouse);
 
     void AddX(float x, UnitType unit = UnitType.Pixel);
     void AddY(float y, UnitType unit = UnitType.Pixel);

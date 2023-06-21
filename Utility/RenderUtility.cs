@@ -16,18 +16,32 @@ namespace VXEngine.Utility {
             content.Canvas.End( );
         }
 
-        public static void DisplayScene(BasicContentController content, SceneBase scene) {
+        public static void DisplayScene(BasicContentController content, BasicConfigController config, SceneBase scene) {
             content.Canvas.Draw(
                 scene.View,
-                new Vector2(0, 0),
+                new Rectangle(
+                    (int)config.ViewOffsetX,
+                    (int)config.ViewOffsetY,
+                    (int)(config.ViewWidth * config.ViewScaleX),
+                    (int)(config.ViewHeight * config.ViewScaleY)
+                ),
                 Color.White
             );
         }
 
-        public static void RenderScene(BasicContentController content, BasicConfigController config, RenderTarget2D scene, SamplerState state = null, Camera camera = null, Color? color = null, Action sceneLogic = null) {
+        public static void RenderScene(BasicContentController content, BasicConfigController config, RenderTarget2D scene, Action sceneLogic, SpriteSortMode? sortMode = null, BlendState? blendState = null, SamplerState? sampler = null, DepthStencilState? depthStencilState = null, RasterizerState? rasterizerState = null, Effect? effect = null, Camera? camera = null, Color? backgroundColor = null)
+        {
             content.Device.SetRenderTarget(scene);
-            content.Device.Clear(color ?? Color.Transparent);
-            content.Canvas.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, state != null ? state : config.IsPixelart ? SamplerState.PointClamp : SamplerState.AnisotropicClamp, null, null, null, camera?.Matrix);
+            content.Device.Clear(backgroundColor ?? Color.Transparent);
+            content.Canvas.Begin(
+                sortMode ?? SpriteSortMode.Deferred,
+                blendState ?? BlendState.AlphaBlend,
+                sampler != null ? sampler : (config.IsPixelart ? SamplerState.PointClamp : SamplerState.AnisotropicClamp),
+                depthStencilState,
+                rasterizerState,
+                effect,
+                camera?.Matrix
+            );
             sceneLogic?.Invoke( );
             content.Canvas.End( );
         }

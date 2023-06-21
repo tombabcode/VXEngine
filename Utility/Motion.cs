@@ -9,8 +9,9 @@ public static class Motion {
     /// <param name="target">Target position</param>
     /// <param name="delta">Delta time in ms</param>
     /// <param name="inertia">How soft the movement should be. Default is 20</param>
+    /// <param name="margin">How detailed should be the result</param>
     /// <returns>New source, smoothen value</returns>
-    public static float Smooth(float source, float target, float delta, float inertia = 20) {
+    public static float Smooth(float source, float target, float delta, float inertia = 20, float margin = .01f) {
         if (delta > 1000) delta = 1000;
 
         bool direction = true;
@@ -20,7 +21,7 @@ public static class Motion {
         float move = (!direction ? 1 : -1) * delta / (inertia * 16.66f) * Math.Abs(source - target);
         source = source - move;
 
-        if ((direction && source > target) || (!direction && source < target))
+        if ((direction && source > target) || (!direction && source < target) || Math.Abs(target - source) <= Math.Abs(margin))
             source = target;
 
         return source;

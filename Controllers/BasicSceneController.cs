@@ -5,6 +5,8 @@ using VXEngine.Utility;
 namespace VXEngine.Controllers {
     public class BasicSceneController {
 
+        private bool _isSceneChanging = true;
+
         protected Dictionary<int, SceneBase> _scenes { get; private set; } = new Dictionary<int, SceneBase>( );
 
         public int CurrentSceneID { get; protected set; } = -1;
@@ -24,17 +26,21 @@ namespace VXEngine.Controllers {
             if (CurrentScene != null)
                 CurrentScene.OnHide( );
 
+            _isSceneChanging = true;
+
             CurrentScene = _scenes[id];
             CurrentScene.OnShow( );
         }
 
         public virtual void Update(GameTime time) {
+            _isSceneChanging = false;
+
             if (CurrentScene != null)
                 CurrentScene.Update(time);
         }
 
         public virtual void Render(GameTime time) {
-            if (CurrentScene == null)
+            if (CurrentScene == null || _isSceneChanging)
                 return;
 
             CurrentScene.Render(time);

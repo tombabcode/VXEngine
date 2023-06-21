@@ -2,13 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using VXEngine.Controllers;
 
-namespace VXEngine.Objects.Primitives;
+namespace VXEngine.Objects.PrimitivesOld;
 
 /// <summary>
 /// Primitive circle
 /// Algorith: Midpoint Circle Algorithm (https://en.wikipedia.org/wiki/Midpoint_circle_algorithm)
 /// </summary>
-public class Circle : GameObject {
+public class Circle : GameObjectOld {
 
     /// <summary>
     /// Content reference

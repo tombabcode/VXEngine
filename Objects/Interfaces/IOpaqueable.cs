@@ -2,7 +2,7 @@
 
 public interface IOpaqueable {
 
-    GameObjectV2 SetOpacity(float opacity);
+    GameObject SetOpacity(float opacity);
     float GetOpacity( );
 
 }

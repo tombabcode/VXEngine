@@ -2,10 +2,10 @@
 
 public interface IAlignable {
 
-    GameObjectV2 SetAlignX(float align);
-    GameObjectV2 SetAlignY(float align);
-    GameObjectV2 SetAlign(float align);
-    GameObjectV2 SetAlign(float alignX, float alignY);
+    GameObject SetAlignX(float align);
+    GameObject SetAlignY(float align);
+    GameObject SetAlign(float align);
+    GameObject SetAlign(float alignX, float alignY);
     float GetAlignX();
     float GetAlignY();
 

@@ -1,8 +1,8 @@
 ﻿using VXEngine.Controllers;
 
-namespace VXEngine.Objects.Primitives;
+namespace VXEngine.Objects.PrimitivesOld;
 
-public class Curve : GameObject {
+public class Curve : GameObjectOld {
 
     /// <summary>
     /// Content reference

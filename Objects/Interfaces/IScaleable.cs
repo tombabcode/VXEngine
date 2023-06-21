@@ -2,9 +2,9 @@
 
 public interface IScaleable {
 
-    GameObjectV2 SetScaleX(float scaleX);
-    GameObjectV2 SetScaleY(float scaleY);
-    GameObjectV2 SetScale(float scale);
+    GameObject SetScaleX(float scaleX);
+    GameObject SetScaleY(float scaleY);
+    GameObject SetScale(float scale);
     float GetScaleX( );
     float GetScaleY( );
 

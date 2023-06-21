@@ -307,18 +307,25 @@ public class BasicInputController {
     /// <summary>
     /// Checks if <see cref="MouseAbsolute"/> is over given position
     /// </summary>
-    public virtual bool IsOver(float x, float y, float width, float height) => MouseAbsolute.X >= x && MouseAbsolute.X <= x + width && MouseAbsolute.Y >= y && MouseAbsolute.Y <= y + height;
+    public virtual bool IsOver(float x, float y, float width, float height) => _propagateEvent && MouseAbsolute.X >= x && MouseAbsolute.X <= x + width && MouseAbsolute.Y >= y && MouseAbsolute.Y <= y + height;
 
     /// <summary>
     /// Checks if <see cref="MouseInGame"/> is over given position
     /// </summary>
-    public virtual bool IsOverInGame(float x, float y, float width, float height) => MouseInGame.X >= x && MouseInGame.X <= x + width && MouseInGame.Y >= y && MouseInGame.Y <= y + height;
+    public virtual bool IsOverInGame(float x, float y, float width, float height) => _propagateEvent && MouseInGame.X >= x && MouseInGame.X <= x + width && MouseInGame.Y >= y && MouseInGame.Y <= y + height;
 
     /// <summary>
     /// Checks if <see cref="MouseInGame"/> is over given object
     /// </summary>
-    public virtual bool IsOverInGame(GameObject obj) => obj == null
+    public virtual bool IsOver(GameObjectOld obj) => obj == null
         ? false
-        : MouseInGame.X >= obj.DisplayX && MouseInGame.X <= obj.DisplayX + obj.DisplayWidth && MouseInGame.Y >= obj.DisplayY && MouseInGame.Y <= obj.DisplayY + obj.DisplayHeight;
+        : _propagateEvent && MouseInGame.X >= obj.DisplayX && MouseInGame.X <= obj.DisplayX + obj.DisplayWidth && MouseInGame.Y >= obj.DisplayY && MouseInGame.Y <= obj.DisplayY + obj.DisplayHeight;
+
+    /// <summary>
+    /// Checks if <see cref="MouseInGame"/> is over given object
+    /// </summary>
+    public virtual bool IsOver(GameObject obj) => obj == null
+        ? false
+        : _propagateEvent && MouseInGame.X >= obj.DisplayX && MouseInGame.X <= obj.DisplayX + obj.DisplayWidth && MouseInGame.Y >= obj.DisplayY && MouseInGame.Y <= obj.DisplayY + obj.DisplayHeight;
 
 }

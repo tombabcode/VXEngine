@@ -3,12 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 using VXEngine.Controllers;
 using VXEngine.Utility;
 
-namespace VXEngine.Objects.Primitives;
+namespace VXEngine.Objects.PrimitivesOld;
 
 /// <summary>
 /// Line 
 /// </summary>
-public sealed class Line : GameObject {
+public sealed class Line : GameObjectOld {
 
     /// <summary>
     /// Content reference

@@ -3,7 +3,7 @@
 namespace VXEngine.Objects.Interfaces;
 public interface IColorable {
 
-    GameObjectV2 SetColor(Color? color);
+    GameObject SetColor(Color? color);
     Color? GetColor( );
 
 }

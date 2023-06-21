@@ -20,7 +20,7 @@ public static class Calculations {
     /// <summary>
     /// Calculate distance between two objects
     /// </summary>
-    public static float Distance(GameObject objA, GameObject objB) => Distance(objA.DisplayX, objA.DisplayY, objB.DisplayX, objB.DisplayY);
+    public static float Distance(GameObjectOld objA, GameObjectOld objB) => Distance(objA.DisplayX, objA.DisplayY, objB.DisplayX, objB.DisplayY);
 
     /// <summary>
     /// Calculate angle between two points. In radians
@@ -35,7 +35,7 @@ public static class Calculations {
     /// <summary>
     /// Calculate angle between two objects. In radians
     /// </summary>
-    public static float Angle(GameObject objA, GameObject objB) => Angle(objA.DisplayX, objA.DisplayY, objB.DisplayX, objB.DisplayY);
+    public static float Angle(GameObjectOld objA, GameObjectOld objB) => Angle(objA.DisplayX, objA.DisplayY, objB.DisplayX, objB.DisplayY);
 
     /// <summary>
     /// Calculate position on a circle, based on given radius and angle

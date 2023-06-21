@@ -1,35 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using VXEngine.Controllers;
 
-namespace VXEngine.Objects.Primitives; 
+namespace VXEngine.Objects.Primitives;
 
-/// <summary>
-/// Non-visible, container that holds other elements
-/// </summary>
 public class Container : GameObject {
 
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    public Container(BasicInputController input) : base(input) { }
+    public Container(BasicConfigController config, BasicInputController input) : base(config, input) { }
 
-    public Rectangle GetBoundingBox( ) {
-        if (_children == null || _children.Count == 0)
-            return new Rectangle((int)_x, (int)_y, (int)_width, (int)_height);
-
-        int minX = int.MaxValue;
-        int minY = int.MaxValue;
-        int maxX = int.MinValue;
-        int maxY = int.MinValue;
-
-        foreach (GameObject child in _children) {
-            if (child.GetX( ) < minX) { minX = (int)child.GetX( ); }
-            if (child.GetY( ) < minY) { minY = (int)child.GetY( ); }
-            if (child.GetX( ) + child.DisplayWidth > maxX) { maxX = (int)child.GetX( ); }
-            if (child.GetY( ) + child.DisplayHeight > maxY) { maxY = (int)child.GetY( ); }
+    // Render
+    public override void Render(GameTime time, bool renderOnlyThisObject = false) {
+        if (DisplayOpacity <= 0) return;
+        if (DisplayWidth <= 0 || DisplayHeight <= 0) {
+            base.Render(time, renderOnlyThisObject);
+            return;
         }
 
-        return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+        base.Render(time, renderOnlyThisObject);
     }
 
 }

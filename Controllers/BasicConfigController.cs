@@ -129,8 +129,8 @@ namespace VXEngine.Controllers {
             if (VolumeMusic > 1) VolumeMusic = 1;
             if (VolumeSound < 0) VolumeSound = 0;
             if (VolumeSound > 1) VolumeSound = 1;
-            if (WindowWidth < _defaultWindowWidth) WindowWidth = _defaultWindowWidth;
-            if (WindowHeight < _defaultWindowHeight) WindowHeight = _defaultWindowHeight;
+            if (WindowWidth < 800) WindowWidth = 800;
+            if (WindowHeight < 600) WindowHeight = 600;
         }
 
         /// <summary>
