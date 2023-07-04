@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace VXEngine.Textures;
 
 /// <summary>
-/// Static image
+/// Tileset with static frame size
 /// </summary>
 public sealed class TextureTileset : TextureBase {
 

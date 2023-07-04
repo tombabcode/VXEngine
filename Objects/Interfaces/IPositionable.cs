@@ -1,5 +1,4 @@
-﻿using VXEngine.Types;
-using static VXEngine.Controllers.BasicInputController;
+﻿using VXEngine.Controllers;
 
 namespace VXEngine.Objects.Interfaces;
 
@@ -8,14 +7,24 @@ public interface IPositionable {
     float GetX( );
     float GetY( );
 
-    GameObject SetX(float x, UnitType unit = UnitType.Pixel);
-    GameObject SetY(float y, UnitType unit = UnitType.Pixel);
-    GameObject SetPosition(float x, float y, UnitType unit = UnitType.Pixel);
-    GameObject SetPosition(MouseData mouse);
+    GameObject SetX(float x);
+    GameObject SetY(float y);
+    GameObject SetPosition(float x, float y);
 
-    void AddX(float x, UnitType unit = UnitType.Pixel);
-    void AddY(float y, UnitType unit = UnitType.Pixel);
-    void AddPosition(float x, float y, UnitType unit = UnitType.Pixel);
-    void AddPosition(float position, UnitType unit = UnitType.Pixel);
+    GameObject SetXAsPercent(float x);
+    GameObject SetYAsPercent(float y);
+    GameObject SetPositionAsPercent(float x, float y);
+
+    GameObject SetPosition(BasicInputController.MouseData mouse);
+
+    void AddX(float x);
+    void AddY(float y);
+    void AddPosition(float x, float y);
+    void AddPosition(float position);
+
+    void AddXAsPercent(float x);
+    void AddYAsPercent(float y);
+    void AddPositionAsPercent(float x, float y);
+    void AddPositionAsPercent(float position);
 
 }

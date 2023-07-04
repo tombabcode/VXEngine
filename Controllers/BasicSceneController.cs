@@ -19,7 +19,7 @@ namespace VXEngine.Controllers {
             }
         }
 
-        public virtual void ChangeScene(int id) {
+        public virtual void ChangeScene(int id, object passDataToNextScene = null) {
             if (!_scenes.ContainsKey(id) || CurrentSceneID == id)
                 return;
 
@@ -29,7 +29,7 @@ namespace VXEngine.Controllers {
             _isSceneChanging = true;
 
             CurrentScene = _scenes[id];
-            CurrentScene.OnShow( );
+            CurrentScene.OnShow(passDataToNextScene);
         }
 
         public virtual void Update(GameTime time) {

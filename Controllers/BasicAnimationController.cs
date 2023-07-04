@@ -11,23 +11,31 @@ namespace VXEngine.Controllers {
             _animations = new List<AnimationInstance>( );
         }
 
-        public virtual AnimationInstance Register(float source, float target, float duration, float delay = 0, float repeatDelay = 0, int repeat = 0, Func<float, float> ease = null) {
-            AnimationInstance instance = new AnimationInstance(source, target, duration, delay, repeatDelay, repeat, ease);
-            _animations.Add(instance);
-            return instance;
-        }
+        public virtual AnimationInstance PlayOnce(float source, float target, float duration, float delay = 0, bool yoyo = false, Func<float, float> ease = null, Action<AnimationInstance> onPlay = null, Action<AnimationInstance> onPause = null, Action<AnimationInstance> onResume = null, Action<AnimationInstance> onStop = null, Action<AnimationInstance> onFinish = null, Action<AnimationInstance> onRepeat = null, Action<AnimationInstance> onReverse = null, Action<AnimationInstance> onUpdate = null) => Register(source, target, duration, delay, 0, 0, yoyo, ease, true, onPlay, onPause, onResume, onStop, onFinish, onRepeat, onReverse, onUpdate);
+        public virtual AnimationInstance PlayLooped(float source, float target, float duration, float delay = 0, float repeatDelay = 0, bool yoyo = false, Func<float, float> ease = null, Action<AnimationInstance> onPlay = null, Action<AnimationInstance> onPause = null, Action<AnimationInstance> onResume = null, Action<AnimationInstance> onStop = null, Action<AnimationInstance> onFinish = null, Action<AnimationInstance> onRepeat = null, Action<AnimationInstance> onReverse = null, Action<AnimationInstance> onUpdate = null) => Register(source, target, duration, delay, -1, repeatDelay, yoyo, ease, true, onPlay, onPause, onResume, onStop, onFinish, onRepeat, onReverse, onUpdate);
+        public virtual AnimationInstance PlayRepeated(float source, float target, float duration, int repeat = 0, float repeatDelay = 0, float delay = 0, bool yoyo = false, Func<float, float> ease = null, Action<AnimationInstance> onPlay = null, Action<AnimationInstance> onPause = null, Action<AnimationInstance> onResume = null, Action<AnimationInstance> onStop = null, Action<AnimationInstance> onFinish = null, Action<AnimationInstance> onRepeat = null, Action<AnimationInstance> onReverse = null, Action<AnimationInstance> onUpdate = null) => Register(source, target, duration, delay, repeat, repeatDelay, yoyo, ease, true, onPlay, onPause, onResume, onStop, onFinish, onRepeat, onReverse, onUpdate);
 
-        public virtual AnimationInstance Once(float source, float target, float duration, float delay = 0, Func<float, float> ease = null) {
-            AnimationInstance instance = new AnimationInstance(source, target, duration, delay, 0, 0, ease);
-            instance.DisposeOnFinish = true;
+        public virtual AnimationInstance Register(float source, float target, float duration, float delay = 0, int repeat = 0, float repeatDelay = 0, bool yoyo = false, Func<float, float> ease = null, bool autoplay = false, Action<AnimationInstance> onPlay = null, Action<AnimationInstance> onPause = null, Action<AnimationInstance> onResume = null, Action<AnimationInstance> onStop = null, Action<AnimationInstance> onFinish = null, Action<AnimationInstance> onRepeat = null, Action<AnimationInstance> onReverse = null, Action<AnimationInstance> onUpdate = null) {
+            AnimationInstance instance = new AnimationInstance(source, target, duration, delay, repeat, repeatDelay, yoyo, ease);
+            instance.OnPlay = onPlay;
+            instance.OnPause = onPause;
+            instance.OnResume = onResume;
+            instance.OnStop = onStop;
+            instance.OnFinish = onFinish;
+            instance.OnRepeat = onRepeat;
+            instance.OnReverse = onReverse;
+            instance.OnUpdate = onUpdate;
+
             _animations.Add(instance);
-            instance.PlayOnce( );
+
+            if (autoplay)
+                instance.PlayRepeat(repeat);
+
             return instance;
         }
 
         public virtual void Delay(float delay, Action<AnimationInstance> onComplete) {
-            AnimationInstance instance = new AnimationInstance(0, 1, 0, delay, 0, 0, Easing.Linear);
-            instance.DisposeOnFinish = true;
+            AnimationInstance instance = new AnimationInstance(0, 1, 0, delay, 0, 0, false, Easing.Linear);
             instance.OnFinish = onComplete;
             _animations.Add(instance);
             instance.PlayOnce( );
@@ -50,12 +58,13 @@ namespace VXEngine.Controllers {
         public virtual void Update(GameTime time) {
             for (int i = 0; i < _animations.Count; i++) {
                 AnimationInstance instance = _animations[i];
-                instance.Update(time);
                 if (instance.IsDisposed) {
                     _animations.RemoveAt(i);
                     i--;
                     continue;
                 }
+
+                instance.Update(time);
             }
         }
 

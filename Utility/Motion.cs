@@ -1,5 +1,8 @@
 ﻿namespace VXEngine.Utility;
 
+/// <summary>
+/// Smoothen the values
+/// </summary>
 public static class Motion {
 
     /// <summary>
@@ -10,7 +13,7 @@ public static class Motion {
     /// <param name="delta">Delta time in ms</param>
     /// <param name="inertia">How soft the movement should be. Default is 20</param>
     /// <param name="margin">How detailed should be the result</param>
-    /// <returns>New source, smoothen value</returns>
+    /// <returns></returns>
     public static float Smooth(float source, float target, float delta, float inertia = 20, float margin = .01f) {
         if (delta > 1000) delta = 1000;
 

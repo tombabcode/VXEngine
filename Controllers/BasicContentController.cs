@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using VXEngine.Models;
 using VXEngine.Textures;
+using VXEngine.Types;
 
 namespace VXEngine.Controllers {
     /// <summary>
@@ -63,34 +64,41 @@ namespace VXEngine.Controllers {
         /// <summary>
         /// Loads given font and assign it to given ID
         /// </summary>
-        public virtual void LoadFont(int id, FontData font) {
-            if (!_fonts.ContainsKey(id))
-                _fonts.Add(id, font);
+        public virtual void LoadFont(FontData font) {
+            if (font != null && !_fonts.ContainsKey(font.ID))
+                _fonts.Add(font.ID, font);
         }
 
         /// <summary>
         /// Loads given font and assign it to given ID
         /// </summary>
-        public virtual void LoadFont(int id, string path, int size) {
+        public virtual void LoadFont(int id, int size, string regularPath, string boldPath = null, string italicPath = null, string boldItalicPath = null) {
             if (!_fonts.ContainsKey(id))
-                _fonts.Add(id, new FontData(_content.Load<SpriteFont>(path), size));
+                _fonts.Add(id, new FontData(
+                    id,
+                    regularPath != null ? _content.Load<SpriteFont>(regularPath) : null,
+                    boldPath != null ? _content.Load<SpriteFont>(boldPath) : null,
+                    italicPath != null ? _content.Load<SpriteFont>(italicPath) : null,
+                    boldItalicPath != null ? _content.Load<SpriteFont>(boldItalicPath) : null,
+                    size)
+                );
         }
 
         /// <summary>
-        /// Gets font with given ID
+        /// Gets font data with given ID
         /// </summary>
-        public virtual FontData GetFont(int id) {
+        public virtual FontData GetFontData(int id) {
             if (_fonts.ContainsKey(id))
                 return _fonts[id];
             return null;
         }
 
         /// <summary>
-        /// Gets only font with given ID
+        /// Gets font with given ID and style
         /// </summary>
-        public virtual SpriteFont GetRawFont(int id) {
+        public virtual SpriteFont GetFont(int id, FontStyle style = FontStyle.Regular) {
             if (_fonts.ContainsKey(id))
-                return _fonts[id].Font;
+                return _fonts[id].GetStyle(style);
             return null;
         }
     }

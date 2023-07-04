@@ -22,7 +22,7 @@ public abstract class SceneBase : GameObject {
     }
 
     public virtual void OnLoad( ) { }
-    public virtual void OnShow( ) { }
+    public virtual void OnShow(object data = null) { }
     public virtual void OnHide( ) { }
 
     public virtual void Display( ) => RenderUtility.DisplayOntoMainScreen(_content, _config, ( ) => RenderUtility.DisplayScene(_content, _config, this));

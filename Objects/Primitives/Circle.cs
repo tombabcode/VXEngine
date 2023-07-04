@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using VXEngine.Controllers;
+using VXEngine.Types;
 
 namespace VXEngine.Objects.Primitives;
 
-public class Box : GameObject {
+public class Circle : GameObject {
 
     protected BasicContentController _content { get; private set; } = null;
 
@@ -12,22 +13,24 @@ public class Box : GameObject {
 
     private Texture2D _textureFill = null;
 
+    public int Radius { get; private set; } = 0;
+
     public Color ColorFill { get; private set; } = Color.White;
 
-    // Constructor
-    public Box(BasicContentController content, BasicConfigController config, BasicInputController input) : this(content, config, input, 0, 0, 0, 0, null) { }
-    public Box(BasicContentController content, BasicConfigController config, BasicInputController input, Color? color) : this(content, config, input, 0, 0, 0, 0, color) { }
-    public Box(BasicContentController content, BasicConfigController config, BasicInputController input, float size, Color? color) : this(content, config, input, 0, 0, size, size, color) { }
-    public Box(BasicContentController content, BasicConfigController config, BasicInputController input, float width, float height) : this(content, config, input, 0, 0, width, height, null) { }
-    public Box(BasicContentController content, BasicConfigController config, BasicInputController input, float width, float height, Color? color) : this(content, config, input, 0, 0, width, height, color) { }
-    public Box(BasicContentController content, BasicConfigController config, BasicInputController input, float x, float y, float width, float height, Color? color) : base(config, input) {
+    public Circle(BasicContentController content, BasicConfigController config, BasicInputController input) : this(content, config, input, 0, 0, 0, null) { }
+    public Circle(BasicContentController content, BasicConfigController config, BasicInputController input, Color? color) : this(content, config, input, 0, 0, 0, color) { }
+    public Circle(BasicContentController content, BasicConfigController config, BasicInputController input, int radius) : this(content, config, input, 0, 0, radius, null) { }
+    public Circle(BasicContentController content, BasicConfigController config, BasicInputController input, int radius, Color? color) : this(content, config, input, 0, 0, radius, color) { }
+    public Circle(BasicContentController content, BasicConfigController config, BasicInputController input, float x, float y, int radius) : this(content, config, input, x, y, radius, null) { }
+    public Circle(BasicContentController content, BasicConfigController config, BasicInputController input, float x, float y, int radius, Color? color) : base(config, input) {
         _content = content;
+        SetRadius(radius);
+        SetSize(radius * 2);
+        SetPosition(x, y);
         ColorFill = color ?? Color.White;
 
         OnParentChange.Add(MarkToRebuild);
         OnSizeChange.Add(MarkToRebuild);
-
-        SetDimension(x, y, width, height);
     }
 
     private void MarkToRebuild( ) {
@@ -37,52 +40,26 @@ public class Box : GameObject {
         });
     }
 
-    public override bool IsPointInside(float x, float y) {
-        if (RenderWidth <= 0 || RenderHeight <= 0)
-            return false;
-
-        // If rectangle is not rotated - checking is simple
-        if (RenderAngle == 0) {
-            return x >= RenderX && x <= RenderX + RenderWidth && y >= RenderY && y <= RenderY + RenderHeight;
-
-        // Check if point is inside rotated rectangle
-        // https://stackoverflow.com/a/17146376/3389035 (Calculate area of triangles)
-        // https://gamedev.stackexchange.com/a/86784 (Calculate corners positions)
-        } else {
-            float cos = (float)Math.Cos(RenderAngle);
-            float sin = (float)Math.Sin(RenderAngle);
-
-            float Ax = RenderX;
-            float Ay = RenderY;
-            float Bx = Ax + cos * RenderWidth;
-            float By = Ay + sin * RenderWidth;
-            float Cx = Ax + cos * RenderWidth - sin * RenderHeight;
-            float Cy = Ay + sin * RenderWidth + cos * RenderHeight;
-            float Dx = Ax + -sin * RenderHeight;
-            float Dy = Ay + cos * RenderHeight;
-
-            // A B C
-            // A P D
-            float areaAPD = Math.Abs((x * Ay - Ax * y) + (Dx * y - x * Dy) + (Ax * Dy - Dx * Ay)) / 2;
-
-            // A B C
-            // D P C
-            float areaDPC = Math.Abs((x * Dy - Dx * y) + (Cx * y - x * Cy) + (Dx * Cy - Cx * Dy)) / 2;
-
-            // A B C
-            // C P B
-            float areaCPB = Math.Abs((x * Cy - Cx * y) + (Bx * y - x * By) + (Cx * By - Bx * Cy)) / 2;
-
-            // A B C
-            // P B A
-            float areaPBA = Math.Abs((Bx * y - x * By) + (Ax * By - Bx * Ay) + (x * Ay - Ax * y)) / 2;
-
-            if ((int)(areaAPD + areaDPC + areaCPB + areaPBA) > (int)(RenderWidth * RenderHeight)) {
-                return false;
-            } else {
-                return true;
-            }
-        }
+    // Overrides
+    public override float GetWidth( ) => Radius * 2;
+    public override float GetHeight( ) => Radius * 2;
+    protected override GameObject SetWidth(float width, UnitType unit) {
+        if (width < 0) width = 0;
+        Radius = (int)((unit == UnitType.Pixel ? width : (Parent != null ? Parent.GetWidth( ) * width : _config.ViewWidth * width)) / 2);
+        if (Radius < 0) Radius = 0;
+        IsTextureRebuildRequired = true;
+        IsSizeUpdateRequired = true;
+        IsPositionUpdateRequired = true;
+        return this;
+    }
+    protected override GameObject SetHeight(float height, UnitType unit) {
+        if (height < 0) height = 0;
+        Radius = (int)((unit == UnitType.Pixel ? height : (Parent != null ? Parent.GetHeight( ) * height : _config.ViewHeight * height)) / 2);
+        if (Radius < 0) Radius = 0;
+        IsTextureRebuildRequired = true;
+        IsSizeUpdateRequired = true;
+        IsPositionUpdateRequired = true;
+        return this;
     }
 
     // Color
@@ -102,7 +79,14 @@ public class Box : GameObject {
         return this;
     }
 
-    // Rebuild texture
+    // Radius
+    public GameObject SetRadius(int radius) {
+        Radius = radius < 0 ? 0 : radius;
+        SetSize(Radius * 2);
+        IsTextureRebuildRequired = true;
+        return this;
+    }
+
     public void Rebuild( ) {
         // Skip if there is no need to rebuild
         if (_textureFill != null && _textureFill.Width == (int)GetWidth( ) && _textureFill.Height == (int)GetHeight( ))
@@ -119,16 +103,32 @@ public class Box : GameObject {
 
         // Create fill texture
         _textureFill = new Texture2D(_content.Device, (int)GetWidth( ), (int)GetHeight( ));
-        Color[] fillData = new Color[_textureFill.Width * _textureFill.Height];
+        Color[] fillData = Enumerable.Repeat(Color.Transparent, _textureFill.Width * _textureFill.Height).ToArray( );
 
-        for (int i = 0; i < fillData.Length; i++)
-            fillData[i] = ColorFill;
+        for (int x = -Radius; x < Radius; x++) {
+            int height = (int)Math.Sqrt(Radius * Radius - x * x);
+
+            for (int y = -height; y < height; y++) {
+                int posX = x + _textureFill.Width / 2;
+                int posY = y + _textureFill.Height / 2;
+                if (posX >= 0 && posY >= 0 && posX < _textureFill.Width && posY < _textureFill.Height)
+                    fillData[posY * _textureFill.Height + posX] = ColorFill;
+            }
+        }
 
         // Set data
         _textureFill.SetData(fillData);
 
         // Reset flag
         IsTextureRebuildRequired = false;
+    }
+
+    public override bool IsPointInside(float x, float y) {
+        if (Radius <= 0)
+            return false;
+
+        float distance = (float)Math.Sqrt(Math.Pow(x - (RenderX + RenderWidth / 2), 2) + Math.Pow(y - (RenderY + RenderHeight / 2), 2));
+        return distance <= Radius * RenderScaleX;
     }
 
     // Update
@@ -153,10 +153,10 @@ public class Box : GameObject {
     public override void Render(GameTime time, bool renderOnlyThisObject = false) {
         if (RenderOpacity <= 0) return;
         if (RenderWidth <= 0 || RenderHeight <= 0 || _textureFill == null) {
-            base.Render(time, renderOnlyThisObject); 
+            base.Render(time, renderOnlyThisObject);
             return;
         }
-        
+
         _content.Canvas.Draw(
             _textureFill,
             new Vector2(RenderX + RenderAngleOriginX, RenderY + RenderAngleOriginY),

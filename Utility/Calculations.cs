@@ -3,6 +3,9 @@ using VXEngine.Objects;
 
 namespace VXEngine.Utility;
 
+/// <summary>
+/// Utility for math
+/// </summary>
 public static class Calculations {
 
     /// <summary>
@@ -20,7 +23,7 @@ public static class Calculations {
     /// <summary>
     /// Calculate distance between two objects
     /// </summary>
-    public static float Distance(GameObjectOld objA, GameObjectOld objB) => Distance(objA.DisplayX, objA.DisplayY, objB.DisplayX, objB.DisplayY);
+    public static float Distance(GameObject objA, GameObject objB) => Distance(objA.RenderX, objA.RenderY, objB.RenderX, objB.RenderY);
 
     /// <summary>
     /// Calculate angle between two points. In radians
@@ -35,7 +38,7 @@ public static class Calculations {
     /// <summary>
     /// Calculate angle between two objects. In radians
     /// </summary>
-    public static float Angle(GameObjectOld objA, GameObjectOld objB) => Angle(objA.DisplayX, objA.DisplayY, objB.DisplayX, objB.DisplayY);
+    public static float Angle(GameObject objA, GameObject objB) => Angle(objA.RenderX, objA.RenderY, objB.RenderX, objB.RenderY);
 
     /// <summary>
     /// Calculate position on a circle, based on given radius and angle
@@ -52,16 +55,5 @@ public static class Calculations {
         (float)(radius * Math.Cos(angleInRadians)) + centerX,
         (float)(radius * Math.Sin(angleInRadians)) + centerY
     );
-
-    /// <summary>
-    /// Transforms radians to degrees
-    /// </summary>
-    public static float RadiansToDegrees(float radians) => (float)(radians * (180f / Math.PI));
-
-    /// <summary>
-    /// Transforms radians to degrees
-    /// </summary>
-    public static float DegreesToRadians(float degrees) => (float)(degrees * (Math.PI / 180));
-
 
 }

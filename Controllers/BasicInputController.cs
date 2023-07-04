@@ -42,7 +42,7 @@ public class BasicInputController {
     /// <summary>
     /// Wheter events (like mouse clicks) should be propagated
     /// </summary>
-    private bool _propagateEvent = true;
+    public bool PropagateEvent { get; private set; } = true;
 
     /// <summary>
     /// Absolute mouse data, relative to the window
@@ -107,7 +107,7 @@ public class BasicInputController {
         _currentKeyboard = Keyboard.GetState( );
 
         // Reset propagation
-        _propagateEvent = true;
+        PropagateEvent = true;
 
         // Set absolute data
         MouseData absoluteData = MouseAbsolute;
@@ -207,62 +207,62 @@ public class BasicInputController {
     /// <summary>
     /// Checks if LMB (Left Mouse Button) is pressed
     /// </summary>
-    public virtual bool IsLMBPressed( ) => _propagateEvent && _currentMouse.LeftButton == ButtonState.Pressed;
+    public virtual bool IsLMBPressed( ) => PropagateEvent && _currentMouse.LeftButton == ButtonState.Pressed;
 
     /// <summary>
     /// Checks if LMB (Left Mouse Button) is pressed for a given duration in milliseconds
     /// </summary>
-    public virtual bool IsLMBPressedFor(float durationInMs) => _propagateEvent && _currentMouse.LeftButton == ButtonState.Pressed && LMBPressDuration >= durationInMs;
+    public virtual bool IsLMBPressedFor(float durationInMs) => PropagateEvent && _currentMouse.LeftButton == ButtonState.Pressed && LMBPressDuration >= durationInMs;
 
     /// <summary>
     /// Checks if LMB (Left Mouse Button) was just pressed
     /// </summary>
-    public virtual bool IsLMBPressedOnce( ) => _propagateEvent && _currentMouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton != ButtonState.Pressed;
+    public virtual bool IsLMBPressedOnce( ) => PropagateEvent && _currentMouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton != ButtonState.Pressed;
 
     /// <summary>
     /// Checks if LMB (Left Mouse Button) was just released
     /// </summary>
-    public virtual bool IsLMBReleased( ) => _propagateEvent && _currentMouse.LeftButton != ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Pressed;
+    public virtual bool IsLMBReleased( ) => PropagateEvent && _currentMouse.LeftButton != ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Pressed;
 
     /// <summary>
     /// Checks if MMB (Middle Mouse Button) is pressed
     /// </summary>
-    public virtual bool IsMMBPressed( ) => _propagateEvent && _currentMouse.MiddleButton == ButtonState.Pressed;
+    public virtual bool IsMMBPressed( ) => PropagateEvent && _currentMouse.MiddleButton == ButtonState.Pressed;
 
     /// <summary>
     /// Checks if MMB (Middle Mouse Button) is pressed for a given duration in milliseconds
     /// </summary>
-    public virtual bool IsMMBPressedFor(float durationInMs) => _propagateEvent && _currentMouse.LeftButton == ButtonState.Pressed && MMBPressDuration >= durationInMs;
+    public virtual bool IsMMBPressedFor(float durationInMs) => PropagateEvent && _currentMouse.LeftButton == ButtonState.Pressed && MMBPressDuration >= durationInMs;
 
     /// <summary>
     /// Checks if MMB (Middle Mouse Button) was just pressed
     /// </summary>
-    public virtual bool IsMMBPressedOnce( ) => _propagateEvent && _currentMouse.MiddleButton == ButtonState.Pressed && _previousMouse.MiddleButton != ButtonState.Pressed;
+    public virtual bool IsMMBPressedOnce( ) => PropagateEvent && _currentMouse.MiddleButton == ButtonState.Pressed && _previousMouse.MiddleButton != ButtonState.Pressed;
 
     /// <summary>
     /// Checks if MMB (Middle Mouse Button) was just released
     /// </summary>
-    public virtual bool IsMMBReleased( ) => _propagateEvent && _currentMouse.MiddleButton != ButtonState.Pressed && _previousMouse.MiddleButton == ButtonState.Pressed;
+    public virtual bool IsMMBReleased( ) => PropagateEvent && _currentMouse.MiddleButton != ButtonState.Pressed && _previousMouse.MiddleButton == ButtonState.Pressed;
 
     /// <summary>
     /// Checks if RMB (Right Mouse Button) is pressed
     /// </summary>
-    public virtual bool IsRMBPressed( ) => _propagateEvent && _currentMouse.RightButton == ButtonState.Pressed;
+    public virtual bool IsRMBPressed( ) => PropagateEvent && _currentMouse.RightButton == ButtonState.Pressed;
 
     /// <summary>
     /// Checks if RMB (Right Mouse Button) is pressed for a given duration in milliseconds
     /// </summary>
-    public virtual bool IsRMBPressedFor(float durationInMs) => _propagateEvent && _currentMouse.LeftButton == ButtonState.Pressed && RMBPressDuration >= durationInMs;
+    public virtual bool IsRMBPressedFor(float durationInMs) => PropagateEvent && _currentMouse.LeftButton == ButtonState.Pressed && RMBPressDuration >= durationInMs;
 
     /// <summary>
     /// Checks if RMB (Right Mouse Button) was just pressed
     /// </summary>
-    public virtual bool IsRMBPressedOnce( ) => _propagateEvent && _currentMouse.RightButton == ButtonState.Pressed && _previousMouse.RightButton != ButtonState.Pressed;
+    public virtual bool IsRMBPressedOnce( ) => PropagateEvent && _currentMouse.RightButton == ButtonState.Pressed && _previousMouse.RightButton != ButtonState.Pressed;
 
     /// <summary>
     /// Checks if RMB (Right Mouse Button) was just released
     /// </summary>
-    public virtual bool IsRMBReleased( ) => _propagateEvent && _currentMouse.RightButton != ButtonState.Pressed && _previousMouse.RightButton == ButtonState.Pressed;
+    public virtual bool IsRMBReleased( ) => PropagateEvent && _currentMouse.RightButton != ButtonState.Pressed && _previousMouse.RightButton == ButtonState.Pressed;
 
     /// <summary>
     /// Checks if LMB (Left Mouse Button) or RMB (Right Mouse Button) is pressed
@@ -302,30 +302,23 @@ public class BasicInputController {
     /// <summary>
     /// Stops event propagation. If function is triggered, it will block any next events of mouse for given tick (logic's loop pass)
     /// </summary>
-    public virtual void StopPropagation( ) => _propagateEvent = false;
+    public virtual void StopPropagation( ) => PropagateEvent = false;
 
     /// <summary>
     /// Checks if <see cref="MouseAbsolute"/> is over given position
     /// </summary>
-    public virtual bool IsOver(float x, float y, float width, float height) => _propagateEvent && MouseAbsolute.X >= x && MouseAbsolute.X <= x + width && MouseAbsolute.Y >= y && MouseAbsolute.Y <= y + height;
+    public virtual bool IsOver(float x, float y, float width, float height) => PropagateEvent && MouseAbsolute.X >= x && MouseAbsolute.X <= x + width && MouseAbsolute.Y >= y && MouseAbsolute.Y <= y + height;
 
     /// <summary>
     /// Checks if <see cref="MouseInGame"/> is over given position
     /// </summary>
-    public virtual bool IsOverInGame(float x, float y, float width, float height) => _propagateEvent && MouseInGame.X >= x && MouseInGame.X <= x + width && MouseInGame.Y >= y && MouseInGame.Y <= y + height;
-
-    /// <summary>
-    /// Checks if <see cref="MouseInGame"/> is over given object
-    /// </summary>
-    public virtual bool IsOver(GameObjectOld obj) => obj == null
-        ? false
-        : _propagateEvent && MouseInGame.X >= obj.DisplayX && MouseInGame.X <= obj.DisplayX + obj.DisplayWidth && MouseInGame.Y >= obj.DisplayY && MouseInGame.Y <= obj.DisplayY + obj.DisplayHeight;
+    public virtual bool IsOverInGame(float x, float y, float width, float height) => PropagateEvent && MouseInGame.X >= x && MouseInGame.X <= x + width && MouseInGame.Y >= y && MouseInGame.Y <= y + height;
 
     /// <summary>
     /// Checks if <see cref="MouseInGame"/> is over given object
     /// </summary>
     public virtual bool IsOver(GameObject obj) => obj == null
         ? false
-        : _propagateEvent && MouseInGame.X >= obj.DisplayX && MouseInGame.X <= obj.DisplayX + obj.DisplayWidth && MouseInGame.Y >= obj.DisplayY && MouseInGame.Y <= obj.DisplayY + obj.DisplayHeight;
+        : PropagateEvent && MouseInGame.X >= obj.RenderX && MouseInGame.X <= obj.RenderX + obj.RenderWidth && MouseInGame.Y >= obj.RenderY && MouseInGame.Y <= obj.RenderY + obj.RenderHeight;
 
 }

@@ -191,11 +191,6 @@ public abstract class GameObjectOld {
     public virtual float GetAngle( ) { return _angle; }
 
     /// <summary>
-    /// Get object's rotation angle in degrees
-    /// </summary>
-    public virtual float GetAngleInDegrees( ) { return Calculations.RadiansToDegrees(_angle); }
-
-    /// <summary>
     /// Get object's rotation origin in X axis
     /// </summary>
     public virtual float GetRotationOriginX( ) { return _rotationOriginX; }
@@ -402,14 +397,6 @@ public abstract class GameObjectOld {
     /// <param name="angle">Angle in radians</param>
     public virtual void SetAngle(float angle) {
         _angle = angle;
-    }
-
-    /// <summary>
-    /// Set object's rotation angle in degrees
-    /// </summary>
-    /// <param name="angle">Angle in degrees</param>
-    public virtual void SetAngleInDegrees(float angle) {
-        _angle = Calculations.DegreesToRadians(angle);
     }
 
     /// <summary>

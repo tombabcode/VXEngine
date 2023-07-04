@@ -33,6 +33,8 @@ namespace VXEngine.Animation {
         /// </summary>
         public float Duration { get; set; }
 
+        public bool Yoyo { get; set; } = false;
+
         /// <summary>
         /// Initial animation delay
         /// </summary>
@@ -64,11 +66,6 @@ namespace VXEngine.Animation {
         public bool IsDisposed { get; protected set; }
 
         /// <summary>
-        /// Should instance be disposed by the controller after finish
-        /// </summary>
-        public bool DisposeOnFinish { get; set; }
-
-        /// <summary>
         /// How many times animation should be repeated before stop
         /// </summary>
         public int RepeatCount { get; protected set; }
@@ -81,47 +78,47 @@ namespace VXEngine.Animation {
         /// <summary>
         /// On animation start event
         /// </summary>
-        public Action<AnimationInstance> OnPlay { get; set; }
+        public Action<AnimationInstance> OnPlay { get; set; } = null;
 
         /// <summary>
         /// On animation pause event
         /// </summary>
-        public Action<AnimationInstance> OnPause { get; set; }
+        public Action<AnimationInstance> OnPause { get; set; } = null;
 
         /// <summary>
         /// On animation resume event
         /// </summary>
-        public Action<AnimationInstance> OnResume { get; set; }
+        public Action<AnimationInstance> OnResume { get; set; } = null;
 
         /// <summary>
         /// On animation stop event
         /// </summary>
-        public Action<AnimationInstance> OnStop { get; set; }
+        public Action<AnimationInstance> OnStop { get; set; } = null;
 
         /// <summary>
         /// On animation absolute stop event
         /// </summary>
-        public Action<AnimationInstance> OnFinish { get; set; }
+        public Action<AnimationInstance> OnFinish { get; set; } = null;
 
         /// <summary>
         /// On animation repeat event
         /// </summary>
-        public Action<AnimationInstance> OnRepeat { get; set; }
+        public Action<AnimationInstance> OnRepeat { get; set; } = null;
 
         /// <summary>
         /// On animation reverse event
         /// </summary>
-        public Action<AnimationInstance> OnReverse { get; set; }
+        public Action<AnimationInstance> OnReverse { get; set; } = null;
 
         /// <summary>
         /// On animation update event
         /// </summary>
-        public Action<AnimationInstance> OnUpdate { get; set; }
+        public Action<AnimationInstance> OnUpdate { get; set; } = null;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AnimationInstance(float source, float target, float duration, float delay = 0, float repeatDelay = 0, int repeat = 0, Func<float, float> ease = null) {
+        public AnimationInstance(float source, float target, float duration, float delay = 0, int repeat = 0, float repeatDelay = 0, bool yoyo = false, Func<float, float> ease = null) {
             Source = source;
             Target = target;
             Duration = duration < 0 ? 0 : duration;
@@ -129,6 +126,7 @@ namespace VXEngine.Animation {
             RepeatDelay = repeatDelay < 0 ? 0 : repeatDelay;
             RepeatCount = repeat;
             _repeatsLeft = repeat;
+            Yoyo = yoyo;
             EaseFunction = ease ?? Easing.Linear;
 
             Progress = 0;
@@ -236,6 +234,8 @@ namespace VXEngine.Animation {
             if (swapEasing) {
                 if (EaseFunction == Easing.QuadIn) EaseFunction = Easing.QuadOut;
                 else if (EaseFunction == Easing.QuadOut) EaseFunction = Easing.QuadIn;
+                else if (EaseFunction == Easing.CubicIn) EaseFunction = Easing.CubicOut;
+                else if (EaseFunction == Easing.CubicOut) EaseFunction = Easing.CubicIn;
             }
         }
 
@@ -274,10 +274,17 @@ namespace VXEngine.Animation {
             } else if (Progress >= 1) {
                 // Repeat or loop
                 if (_repeatsLeft > 0 || _repeatsLeft == -1) {
-                    _timePassed -= (Duration + RepeatDelay);
-                    _repeatsLeft -= 1;
-                    Progress = Duration == 0 ? 1 : _timePassed / Duration;
-                    Value = (Target - Source) * EaseFunction.Invoke(Progress) + Source;
+                    if (_repeatsLeft > 0)
+                        _repeatsLeft -= 1;
+
+                    if (Yoyo)
+                        Reverse(true);
+                    else {
+                        _timePassed -= (Duration + RepeatDelay);
+                        Progress = Duration == 0 ? 1 : _timePassed / Duration;
+                        Value = (Target - Source) * EaseFunction.Invoke(Progress) + Source;
+                    }
+
                     OnUpdate?.Invoke(this);
                     OnRepeat?.Invoke(this);
 
@@ -289,9 +296,7 @@ namespace VXEngine.Animation {
                     OnUpdate?.Invoke(this);
                     OnFinish?.Invoke(this);
 
-                    // Dispose
-                    if (DisposeOnFinish)
-                        Dispose( );
+                    Dispose( );
                 }
 
             // During
